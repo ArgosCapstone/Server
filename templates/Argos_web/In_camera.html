@@ -1,0 +1,306 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argos Fire Monitoring System - In Camera</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(-45deg, #00adb5, #393e46, #006064, #0f4c75);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #eeeeee;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 파티클 효과 */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .particle.small {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 255, 255, 0.4);
+        }
+
+        .particle.medium {
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 255, 255, 0.6);
+        }
+
+        .particle.large {
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50px) translateX(50px); opacity: 0.5; }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        /* 햄버거 메뉴 스타일 */
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 40;
+        }
+
+        .hamburger-menu .line {
+            width: 100%;
+            height: 4px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 225px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            z-index: 30;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .side-menu ul {
+            list-style: none;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .side-menu ul li a {
+            color: #00adb5;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .side-menu ul li a:hover {
+            color: #fff;
+        }
+
+        .side-menu.active {
+            right: 0;
+        }
+
+        /* 콘텐츠 컨테이너 스타일 */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .content-container h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #00fff5;
+        }
+
+        .content-container p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #d4d4d4;
+        }
+
+        .video-frame {
+            width: 90%;
+            max-width: 700px;
+            height: 350px;
+            background: rgba(57, 62, 70, 0.8);
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 255, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00adb5;
+            font-size: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .coordinates {
+            width: 90%;
+            max-width: 700px;
+            padding: 15px;
+            background-color: rgba(57, 62, 70, 0.8);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #00adb5;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #00fff5;
+        }
+    </style>
+</head>
+<body>
+    <!-- 파티클 요소 -->
+    <div class="particle small" style="top: 10%; left: 15%;"></div>
+    <div class="particle medium" style="top: 20%; left: 25%;"></div>
+    <div class="particle large" style="top: 50%; left: 35%;"></div>
+    <div class="particle small" style="top: 30%; left: 70%;"></div>
+    <div class="particle medium" style="top: 70%; left: 80%;"></div>
+    <div class="particle large" style="top: 80%; left: 10%;"></div>
+    <div class="particle medium" style="top: 60%; left: 50%;"></div>
+    <div class="particle small" style="top: 40%; left: 90%;"></div>
+
+    <!-- 햄버거 메뉴 -->
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+    <div class="side-menu" id="menu">
+    <ul>
+        <li><a href="{% url 'Report_record' %}?next={{ request.path }}">Report Record</a></li>
+        <li><a href="{% url 'Video_record' %}?next={{ request.path }}">Video Record</a></li>
+        <li><a href="{% url 'My_page' %}?next={{ request.path }}">My Page</a></li>
+        <li><a href="{% url 'In_camera' %}?next={{ request.path }}">In Camera</a></li>
+    </ul>
+</div>
+
+
+    <!-- 콘텐츠 컨테이너 -->
+    <div class="content-container">
+        <h1>In Camera</h1>
+        <p>주행 로봇이 촬영하는 실시간 영상을 확인할 수 있습니다.</p>
+        <div class="video-frame">
+            <video id="video" controls autoplay muted style="width: 100%; height: 100%;"></video>
+        </div>
+        <button class="button" onclick="location.href='/yolo-stream/'">YOLO Stream</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.classList.toggle('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var video = document.getElementById('video');
+        var hls;
+
+        function initializeHls() {
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    maxBufferLength: 3,
+                    maxBufferHole: 0.1,
+                    maxLiveSyncPlaybackRate: 1.5, // 스트리밍이 뒤쳐졌을 때 재생 속도를 1.5배로 증가
+                    liveSyncDuration: 2, // 라이브 스트림 동기화 지연 시간을 2초로 설정
+                    liveMaxLatencyDuration: 3, // 허용 가능한 최대 지연 시간을 3초로 제한
+                    liveBackBufferLength: 0, // 라이브 백버퍼를 비활성화하여 추가적인 메모리 사용 방지
+                    enableWorker: true, // 워커를 활성화하여 처리 성능 향상
+                    startPosition: -1, // 스트림의 가장 최신 위치에서 시작
+                    lowLatencyMode: true, // 저지연 모드 활성화
+                    autoStartLoad: true, // 자동으로 스트림 로드 시작
+                });
+                hls.loadSource("{% static 'hls/output.m3u8' %}"); // HLS URL
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play().catch(error => console.warn("play() error:", error));
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    console.error("HLS error:", data);
+                    if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                        console.warn("Media error encountered, attempting to recover...");
+                        hls.recoverMediaError();
+                    } else if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+                        console.error("Network error:", data);
+                        attemptReconnect();
+                    } else {
+                        console.error("Critical HLS error, reinitializing stream...");
+                        attemptReconnect();
+                    }
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = "{% static 'hls/output.m3u8' %}"; // HLS URL
+                video.addEventListener('loadedmetadata', function () {
+                    video.play().catch(error => console.warn("play() error:", error));
+                });
+            }
+        }
+
+        function attemptReconnect() {
+            if (hls) {
+                hls.destroy();
+            }
+            console.warn("Reconnecting in 3 seconds...");
+            setTimeout(initializeHls, 3000);
+        }
+
+        initializeHls();
+    });
+    
+    </script>
+    
+</body>
+</html>

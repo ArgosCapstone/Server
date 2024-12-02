@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - Argos Fire Monitoring System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(-45deg, #00adb5, #393e46, #006064, #0f4c75);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #eeeeee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .particle.small {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 255, 255, 0.4);
+        }
+
+        .particle.medium {
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 255, 255, 0.6);
+        }
+
+        .particle.large {
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-50px) translateX(50px);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .signup-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            z-index: 10;
+        }
+
+        .signup-container h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #00fff5;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-container label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #cccccc;
+            text-align: left;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .input-container input {
+            width: 100%;
+            max-width: 350px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: #f2f2f2;
+            color: #333;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-container input:focus {
+            border: 2px solid #00adb5;
+            background-color: #e8f6f7;
+        }
+
+        .signup-container button {
+            width: 100%;
+            max-width: 370px;
+            padding: 12px;
+            margin-top: 10px;
+            background: #00adb5;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .signup-container button:hover {
+            transform: scale(1.05);
+            background: #02888f;
+        }
+    </style>
+</head>
+<body>
+    <div class="particle small" style="top: 10%; left: 15%;"></div>
+    <div class="particle medium" style="top: 20%; left: 25%;"></div>
+    <div class="particle large" style="top: 50%; left: 35%;"></div>
+    <div class="particle small" style="top: 30%; left: 70%;"></div>
+    <div class="particle medium" style="top: 70%; left: 80%;"></div>
+    <div class="particle large" style="top: 80%; left: 10%;"></div>
+    <div class="particle medium" style="top: 60%; left: 50%;"></div>
+    <div class="particle small" style="top: 40%; left: 90%;"></div>
+
+    <div class="signup-container">
+        <h1>회원가입</h1>
+        <form method="post" action="{% url 'sign_up' %}" onsubmit="return validateForm(event)">
+            {% csrf_token %}
+            <div class="input-container">
+                <label for="username">아이디</label>
+                <input type="text" name="username" id="username" placeholder="아이디 입력" required>
+            </div>
+            <div class="input-container">
+                <label for="password">비밀번호</label>
+                <input type="password" name="password" id="password" placeholder="비밀번호 입력" required>
+            </div>
+            <div class="input-container">
+                <label for="confirmPassword">비밀번호 확인</label>
+                <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required>
+            </div>
+            <div class="input-container">
+                <label for="email">이메일</label>
+                <input type="email" name="email" id="email" placeholder="example@email.com" required>
+            </div>
+            <div class="input-container">
+                <label for="phone">전화번호</label>
+                <input type="tel" name="phone_number" id="phone" placeholder="010-1234-5678" required>
+            </div>
+            <button type="submit">회원가입 신청</button>
+            <button type="button" onclick="redirectToHome()">로그인 화면으로 돌아가기</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                return false; // 폼 제출 중단
+            }
+
+            return true; // 폼 제출 진행
+        }
+
+        function redirectToHome() {
+            window.location.href = "{% url 'home' %}"; // 로그인 화면으로 이동
+        }
+    </script>
+</body>
+</html>

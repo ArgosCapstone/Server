@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argos Fire Monitoring System - 관리자 페이지</title>
+    <style>
+        /* 기본 스타일 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(-45deg, #00adb5, #393e46, #006064, #0f4c75);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #eeeeee;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 파티클 효과 */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .particle.small {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 255, 255, 0.4);
+        }
+
+        .particle.medium {
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 255, 255, 0.6);
+        }
+
+        .particle.large {
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50px) translateX(50px); opacity: 0.5; }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        /* 햄버거 메뉴 */
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 40;
+        }
+
+        .hamburger-menu div {
+            width: 100%;
+            height: 4px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 225px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            z-index: 30;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .side-menu.active {
+            right: 0;
+        }
+
+        .side-menu ul {
+            list-style: none;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .side-menu ul li a {
+            color: #00adb5;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .side-menu ul li a:hover {
+            color: #fff;
+        }
+
+        /* 컨테이너 스타일 */
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            width: 90%;
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .container h1 {
+            font-size: 32px;
+            color: #00fff5;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            color: #00adb5;
+            margin-bottom: 10px;
+        }
+
+        .approval-list, .approved-list {
+            background-color: #393e46;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #555;
+        }
+
+        .user-item span {
+            color: #eeeeee;
+            flex: 1;
+            text-overflow: ellipsis;
+        }
+
+        .user-item .email {
+            margin-left: 20px;
+            flex: 2;
+        }
+
+        .user-item button {
+            background-color: #00adb5;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+            transition: background-color 0.3s;
+        }
+
+        .user-item button:hover {
+            background-color: #02888f;
+        }
+
+        .user-item button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- 파티클 효과 -->
+    <div class="particle small" style="top: 10%; left: 15%;"></div>
+    <div class="particle medium" style="top: 20%; left: 25%;"></div>
+    <div class="particle large" style="top: 50%; left: 35%;"></div>
+    <div class="particle small" style="top: 30%; left: 70%;"></div>
+    <div class="particle medium" style="top: 70%; left: 80%;"></div>
+    <div class="particle large" style="top: 80%; left: 10%;"></div>
+    <div class="particle medium" style="top: 60%; left: 50%;"></div>
+    <div class="particle small" style="top: 40%; left: 90%;"></div>
+
+    <!-- 햄버거 메뉴 -->
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="side-menu" id="menu">
+        <ul>
+            <li><a href="{% url 'Report_record' %}?next={{ request.path }}">Report Record</a></li>
+            <li><a href="{% url 'Video_record' %}?next={{ request.path }}">Video Record</a></li>
+            <li><a href="{% url 'My_page' %}?next={{ request.path }}">My Page</a></li>
+            <li><a href="{% url 'In_camera' %}?next={{ request.path }}">In Camera</a></li>
+    </div>
+
+    <!-- 관리자 페이지 -->
+    <div class="container">
+        <h1>관리자 페이지</h1>
+        <div class="section">
+            <h2>회원가입 요청 승인</h2>
+            <div class="approval-list" id="approvalList">
+                <!-- 서버에서 사용자 목록 동적으로 로드 -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>승인된 사용자</h2>
+            <div class="approved-list" id="approvedList">
+                <!-- 승인된 사용자 목록 -->
+            </div>
+        </div>
+
+    <!-- Home으로 돌아가기 버튼 -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="goToHome()" style="background-color: #00adb5; color: #ffffff; border: none; padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; transition: background-color 0.3s;">
+            Back
+        </button>
+    </div>
+    </div>
+
+    <script>
+        // 메뉴 토글
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const hamburger = document.querySelector('.hamburger-menu');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+        // CSRF 토큰 가져오기
+        function getCsrfToken() {
+            return document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
+        }
+        // 사용자 승인 요청
+        function approveUser(userId) {
+            fetch(`/admin/approve_user/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`${data.username} 사용자가 승인되었습니다.`);
+                    loadUserLists(); // 사용자 목록 다시 로드
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // 사용자 승인 취소
+        function unapproveUser(userId) {
+            fetch(`/admin/unapprove_user/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`${data.username} 사용자의 승인이 취소되었습니다.`);
+                    loadUserLists(); // 사용자 목록 다시 로드
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        // 사용자 목록 로드
+        function loadUserLists() {
+            fetch('/admin/get_users/')
+                .then(response => response.json())
+                .then(data => {
+                    const approvalList = document.getElementById('approvalList');
+                    const approvedList = document.getElementById('approvedList');
+
+                    approvalList.innerHTML = '';
+                    approvedList.innerHTML = '';
+
+                    data.pending.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.className = 'user-item';
+                        userItem.innerHTML = `
+                            <span class="username">${user.username}</span>
+                            <span class="email">${user.email}</span>
+                            <button onclick="approveUser('${user.user_id}')">승인</button>
+                        `;
+                        approvalList.appendChild(userItem);
+                    });
+
+                    data.approved.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.className = 'user-item';
+                        userItem.innerHTML = `
+                            <span class="username">${user.username}</span>
+                            <span class="email">${user.email}</span>
+                            <button onclick="unapproveUser('${user.user_id}')">승인 취소</button>
+                        `;
+                        approvedList.appendChild(userItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 초기 사용자 목록 로드
+        document.addEventListener('DOMContentLoaded', loadUserLists);
+
+        // back으로 돌아가기
+    function goToHome() {
+        window.location.href = "{% url 'My_page' %}";
+    }
+    </script>
+</body>
+</html>

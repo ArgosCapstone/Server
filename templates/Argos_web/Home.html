@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argos Fire Monitoring System - 관리자 로그인</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(-45deg, #00adb5, #393e46, #006064, #0f4c75);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #eeeeee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 로그인 컨테이너 */
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10; /* 입자 애니메이션보다 위에 위치 */
+        }
+
+        .login-container h1 {
+            font-size: 60px;
+	margin-top: 0px;
+            margin-bottom: 0px;
+            color: #00fff5;
+        }
+
+        .login-container h2 {
+            font-size: 24.5px;
+            margin-bottom: 15px;
+            color: #d4d4d4;
+        }
+
+        .login-container p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
+
+        /* 입력 필드 스타일 */
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .input-container i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 10px 40px 10px 40px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #f2f2f2;
+            color: #333;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .input-container input:focus {
+            border: 2px solid #00adb5;
+            background-color: #e8f6f7;
+        }
+
+        /* 버튼 스타일 */
+        .login-container button {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            margin-top: 10px;
+            background: #00adb5;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            transform: scale(1.05);
+            background: #02888f;
+        }
+
+        /* 옵션 링크 스타일 */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .options a {
+            text-decoration: none;
+            font-size: 14px;
+            color: #00fff5;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .options a:hover {
+            background-color: #00fff5;
+            color: #222831;
+        }
+
+        /* 입자 애니메이션 스타일 */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .particle.small {
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 255, 255, 0.4);
+        }
+
+        .particle.medium {
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 255, 255, 0.6);
+        }
+
+        .particle.large {
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-50px) translateX(50px);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 입자 애니메이션 요소 -->
+    <div class="particle small" style="top: 10%; left: 15%;"></div>
+    <div class="particle medium" style="top: 20%; left: 25%;"></div>
+    <div class="particle large" style="top: 50%; left: 35%;"></div>
+    <div class="particle small" style="top: 30%; left: 70%;"></div>
+    <div class="particle medium" style="top: 70%; left: 80%;"></div>
+    <div class="particle large" style="top: 80%; left: 10%;"></div>
+    <div class="particle medium" style="top: 60%; left: 50%;"></div>
+    <div class="particle small" style="top: 40%; left: 90%;"></div>
+
+    <div class="login-container">
+        <h1>Argos</h1>
+        <h2>Fire Monitoring System</h2>
+        <p>주차장 화재 감시 및 드론 제어 시스템</p>
+
+        <!-- 메시지 출력 블록 -->
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form action="{% url 'login' %}" method="post" onsubmit="checkApprovalStatus(event)">
+            {% csrf_token %}
+            <div class="input-container">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" id="username" placeholder="아이디" required aria-label="아이디 입력">
+            </div>
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" id="password" placeholder="비밀번호" required aria-label="비밀번호 입력">
+            </div>
+            <button type="submit">로그인</button>
+        </form>        
+        <div class="options">
+            <a href="{% url 'Sign_up' %}">회원가입</a>
+            <a href="{% url 'Id_password' %}">아이디 찾기</a>
+            <a href="{% url 'Id_password' %}">비밀번호 찾기</a>
+        </div>
+    </div>
+</body>
+</html>

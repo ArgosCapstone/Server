@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Lot Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #87CEEB, #f4f4f4);
+            margin: 0;
+        }
+
+        .container {
+            position: relative;
+            width: 70%;
+            max-width: 1000px; /* 컨테이너 최대 가로 크기 */
+            height: 70%;
+            max-height: 800px; /* 컨테이너 최대 세로 크기 */
+            border: 8px solid #333; /* 중앙 경계 테두리 */
+            border-radius: 20px;
+            background-color: white;
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr; /* 왼쪽 두 줄, 통행로, 오른쪽 한 줄 */
+            gap: 10px; /* 통행로 공간 */
+            padding: 10px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .parking-column {
+            display: flex;
+            flex-direction: column;
+            gap: 5px; /* 주차선 간격 조정 */
+            align-items: center;
+        }
+
+        .parking-spot {
+            width: 50px; /* 주차선 크기 조정 */
+            height: 70px; /* 주차선 크기 조정 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 3px solid; /* 테두리 */
+            color: black;
+            transition: background-color 0.5s ease, transform 0.2s ease;
+        }
+
+        .parking-spot.green {
+            border-color: #4CAF50; /* 초록색 테두리 */
+        }
+
+        .parking-spot.yellow {
+            border-color: #FFC107; /* 노랑색 테두리 */
+        }
+
+        .parking-spot.red {
+            border-color: #F44336; /* 빨간색 테두리 */
+        }
+
+        .traffic-lane {
+            background-color: #d3d3d3;
+            border-radius: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            height: 90%;
+        }
+
+        .footer {
+            grid-column: span 3;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .footer span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 왼쪽 두 줄 -->
+        <div class="parking-column">
+            <div id="spot-1" class="parking-spot green">1</div>
+            <div id="spot-2" class="parking-spot green">2</div>
+            <div id="spot-3" class="parking-spot green">3</div>
+            <div id="spot-4" class="parking-spot green">4</div>
+            <div id="spot-5" class="parking-spot green">5</div>
+            <div id="spot-6" class="parking-spot green">6</div>
+            <div id="spot-7" class="parking-spot green">7</div>
+        </div>
+        <div class="parking-column">
+            <div id="spot-8" class="parking-spot green">8</div>
+            <div id="spot-9" class="parking-spot green">9</div>
+            <div id="spot-10" class="parking-spot green">10</div>
+            <div id="spot-11" class="parking-spot green">11</div>
+            <div id="spot-12" class="parking-spot green">12</div>
+            <div id="spot-13" class="parking-spot green">13</div>
+            <div id="spot-14" class="parking-spot green">14</div>
+        </div>
+
+        <!-- 통행로 -->
+        <div class="traffic-lane">Traffic Lane</div>
+
+        <!-- 오른쪽 한 줄 -->
+        <div class="parking-column">
+            <div id="spot-15" class="parking-spot green">15</div>
+            <div id="spot-16" class="parking-spot green">16</div>
+            <div id="spot-17" class="parking-spot green">17</div>
+            <div id="spot-18" class="parking-spot green">18</div>
+            <div id="spot-19" class="parking-spot green">19</div>
+            <div id="spot-20" class="parking-spot green">20</div>
+            <div id="spot-21" class="parking-spot green">21</div>
+        </div>
+
+        <div class="footer">
+            <p>Last Updated: <span id="last-updated">Never</span></p>
+        </div>
+    </div>
+
+    <script>
+        function simulateFire() {
+            setTimeout(() => {
+                const fireSpot = document.getElementById("spot-13");
+                if (fireSpot) {
+                    fireSpot.className = "parking-spot red";
+                    fireSpot.textContent = "FIRE!";
+                }
+            }, 30000); // 30초 후 화재
+        }
+
+        // 페이지 로드 시 동작
+        document.addEventListener("DOMContentLoaded", () => {
+            simulateFire();
+        });
+    </script>
+</body>
+</html>
